@@ -67,15 +67,11 @@ object FunSets {
    * that satisfies `p`.
    */
   def exists(s: Set, p: Int => Boolean): Boolean = !forall(s, x => !p(x))
-  // forall(s, p) : 모두 만족하는지
-  // exists : 만족하는게 하나라도 있는지
-  // forall을 이용해서 exists를 구현
-  // iter를 돌면서 !p를 돌린다 -> 싹다 만족하지 않는 경우 true가 나옴, 하나라도 있으면 false. 이걸 다시 !를 해주자
 
   /**
    * Returns a set transformed by applying `f` to each element of `s`.
    */
-  def map(s: Set, f: Int => Int): Set = x => exists(s, )
+  def map(s: Set, f: Int => Int): Set = x => exists(s, f(_) == x)
 
   /**
    * Displays the contents of a set

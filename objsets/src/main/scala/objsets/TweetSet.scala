@@ -70,6 +70,8 @@ abstract class TweetSet {
    */
   def mostRetweeted: Tweet
 
+  def mostRetweetedAux(axisValue: Tweet): Tweet
+
   /**
    * Returns a list containing all tweets of this set, sorted by retweet count
    * in descending order. In other words, the head of the resulting list should
@@ -116,6 +118,8 @@ class Empty extends TweetSet {
 
   def mostRetweeted: Tweet = throw new java.util.NoSuchElementException("most Retweeted of empty TweetSet")
 
+  def mostRetweetedAux(axisValue: Tweet): Tweet = axisValue
+
   def descendingByRetweet: TweetList = Nil
 
   def union(that: TweetSet): TweetSet = that
@@ -140,8 +144,34 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
   }
 
   def mostRetweeted: Tweet = {
-    List(left.mostRetweeted, elem, right.mostRetweeted).maxBy(_.retweets)
+    mostRetweetedAux(elem)
   }
+
+  def mostRetweetedAux(axisValue: Tweet): Tweet = {
+    try {
+      List(left.mostRetweetedAux(elem), elem, right.mostRetweetedAux(elem)).maxBy(_.retweets)
+    } catch {
+      case _: NoSuchElementException => elem
+    }
+  }
+
+//    this.left match {
+//      case e : Empty => elem
+//      case _ : NonEmpty => List(left.mostRetweeted, elem, right.mostRetweeted).maxBy(_.retweets)
+//    }
+//    match left {
+//      case e : Empty => List(elem, elem, right.mostRetweeted).maxBy(_.retweets)
+//      case _ => List(left.mostRetweeted, elem, right.mostRetweeted).maxBy(_.retweets)
+//    }
+//    try {
+//      List(left.mostRetweeted, elem, right.mostRetweeted).maxBy(_.retweets)
+//    } catch {
+//      case _ : NoSuchElementException => elem
+//    }
+  //    match this {
+  //      case _ : Empty => elem
+  //      case _: NonEmpty => List(left.mostRetweeted, elem, right.mostRetweeted).maxBy(_.retweets)
+  //    }
 
   def descendingByRetweet: TweetList = {
     new Cons(mostRetweeted, remove(mostRetweeted).descendingByRetweet)

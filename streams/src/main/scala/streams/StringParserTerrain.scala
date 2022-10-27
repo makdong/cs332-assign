@@ -53,7 +53,7 @@ trait StringParserTerrain extends GameDef {
    * by `levelVector`.
    */
   def terrainFunction(levelVector: Vector[Vector[Char]]): Pos => Boolean =
-    Pos => Try(levelVector(Pos.x)(Pos.y) != '-').getOrElse(false)
+    Pos => scala.util.Try(levelVector(Pos.x)(Pos.y) != '-').getOrElse(false)
 
   /**
    * This function should return the position of character `c` in the
@@ -65,7 +65,8 @@ trait StringParserTerrain extends GameDef {
    */
   def findChar(c: Char, levelVector: Vector[Vector[Char]]): Pos = {
     val row = levelVector.indexWhere(_.contains(c))
-    val col = row.indexOf(c)
+    val col = levelVector(row).indexOf(c)
+
     Pos(row, col)
   }
 
